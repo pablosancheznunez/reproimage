@@ -1,7 +1,7 @@
 {
   "risk_paths": {
-    "high": ["ALGORITHMS.md", "src/reproimage/hashing.py", "src/reproimage/analysis.py", "r/R/hashing.R", "r/R/analysis.R", "reference/**", "r/inst/extdata/reference/**"],
-    "low": ["README.md", "index.html", "example/**", "r/README.md", "r/man/**"]
+    "high": ["ALGORITHMS.md", "src/reproimage/hashing.py", "src/reproimage/analysis.py", "r/R/hashing.R", "r/R/analysis.R", "reference/generate.py", "r/inst/extdata/reference/**"],
+    "low": ["README.md", "index.html", "r/README.md", "r/man/**"]
   },
   "release": { "version_files": ["CITATION.cff", "pyproject.toml", "src/reproimage/__init__.py", "r/DESCRIPTION"] }
 }

@@ -1,6 +1,6 @@
 # ReproImage algorithms (version 1)
 
-This is the normative specification. The Python package (`src/reproimage/`) and the R package (`r/`) implement it independently and are tested against the same reference images and expected results (`reference/expected.json`). Any change here is a new algorithm version.
+This is the normative specification. The Python package (`src/reproimage/`) and the R package (`r/`) implement it independently and are tested against the same reference images and expected results (`r/inst/extdata/reference/expected.json`). Any change here is a new algorithm version.
 
 ## 1. Decoding
 

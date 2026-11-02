@@ -4,8 +4,8 @@
 /src/reproimage/analysis.py @pablosancheznunez
 /r/R/hashing.R @pablosancheznunez
 /r/R/analysis.R @pablosancheznunez
-/reference/ @pablosancheznunez
-/r/inst/extdata/reference/ @pablosancheznunez
+/reference/generate.py @pablosancheznunez
+/r/inst/extdata/reference/generate.py @pablosancheznunez
 /.github/ @pablosancheznunez
 /.maintenance.json @pablosancheznunez
 /CONTRIBUTING.md @pablosancheznunez

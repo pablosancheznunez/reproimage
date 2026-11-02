@@ -1,7 +1,7 @@
 """Generate the synthetic reference dataset (deterministic, no third-party images).
 
-The images in reference/images/ are committed; this script documents how they
-were made. Regenerating them with another zlib or Pillow version may change the
+The images in r/inst/extdata/reference/images/ are committed (a single copy, used by the Python
+tests, the R package and the examples); this script documents how they were made. Regenerating them with another zlib or Pillow version may change the
 file bytes, so expected.json would need review (a high-risk change).
 
     python reference/generate.py
@@ -13,7 +13,7 @@ from pathlib import Path
 import numpy as np
 from PIL import Image
 
-OUT = Path(__file__).parent / "images"
+OUT = Path(__file__).resolve().parents[1] / "r/inst/extdata/reference" / "images"
 SIZE = 128
 
 

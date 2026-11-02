@@ -7,7 +7,7 @@ Thank you for helping improve ReproImage. Bug reports with a minimal image pair,
 - Python: `pip install -e .[test] && python -m pytest -q`.
 - R package: `R CMD build r && R CMD check --as-cran reproimage_*.tar.gz`.
 
-Both implementations must give identical results on the reference images; the tests compare each with `reference/expected.json`.
+Both implementations must give identical results on the reference images; the tests compare each with `r/inst/extdata/reference/expected.json`.
 
 ## Changes that may be made without the maintainer's review
 
@@ -16,7 +16,7 @@ Both implementations must give identical results on the reference images; the te
 
 ## Changes that always need the maintainer's review
 
-- `ALGORITHMS.md`, `src/reproimage/hashing.py`, `src/reproimage/analysis.py`, `r/R/hashing.R`, `r/R/analysis.R`, `reference/` and `r/inst/extdata/reference/`. These define what the tool detects; a change is a new algorithm version.
+- `ALGORITHMS.md`, `src/reproimage/hashing.py`, `src/reproimage/analysis.py`, `r/R/hashing.R`, `r/R/analysis.R`, `reference/generate.py` and `r/inst/extdata/reference/`. These define what the tool detects; a change is a new algorithm version.
 - Workflows, `.maintenance.json`, `CODEOWNERS` and this file.
 
 Tests are never weakened or deleted to make them pass.

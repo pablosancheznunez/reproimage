@@ -33,7 +33,7 @@ Depends only on `png`, `jpeg`, `tiff`, `digest` and `jsonlite` (no ImageMagick).
 
 ## One specification, two implementations
 
-The algorithms are written down in [`ALGORITHMS.md`](ALGORITHMS.md): decoding, grey level, a block resize that avoids library resampling, SHA-256 of files and pixels, dHash and pHash in eight orientations, and the pair rules. Python and R implement it independently and are tested against the same [reference dataset](reference/) and [expected results](reference/expected.json). If either drifts, CI fails.
+The algorithms are written down in [`ALGORITHMS.md`](ALGORITHMS.md): decoding, grey level, a block resize that avoids library resampling, SHA-256 of files and pixels, dHash and pHash in eight orientations, and the pair rules. Python and R implement it independently and are tested against the same [reference dataset](r/inst/extdata/reference/images) and [expected results](r/inst/extdata/reference/expected.json). If either drifts, CI fails.
 
 ## Known limits
 

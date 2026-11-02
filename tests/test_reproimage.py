@@ -10,7 +10,7 @@ from reproimage.cli import main
 from reproimage.hashing import bits_to_hex, block_resize, dhash, hamming, orient
 
 ROOT = Path(__file__).resolve().parents[1]
-REFERENCE = ROOT / "reference"
+REFERENCE = ROOT / "r" / "inst" / "extdata" / "reference"  # single copy, shared with the R package
 CONFORMANCE_KEYS = ["name", "file_sha256", "pixel_sha256", "width", "height", "dhash", "phash"]
 
 
@@ -79,10 +79,3 @@ def test_cli_writes_report_and_provenance(tmp_path):
     action = next(e for e in crate["@graph"] if e["@type"] == "CreateAction")
     assert len(action["object"]) == 12
     assert "Requires expert review" in (out / "report.html").read_text(encoding="utf-8")
-
-
-def test_r_package_uses_the_same_reference():
-    r_ref = ROOT / "r" / "inst" / "extdata" / "reference"
-    for path in sorted((REFERENCE / "images").iterdir()):
-        assert (r_ref / "images" / path.name).read_bytes() == path.read_bytes(), f"copy {path.name} to {r_ref}"
-    assert json.loads((r_ref / "expected.json").read_text(encoding="utf-8")) == json.loads((REFERENCE / "expected.json").read_text(encoding="utf-8"))
