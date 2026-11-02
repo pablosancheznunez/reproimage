@@ -8,5 +8,7 @@ on:
 jobs:
   cran:
     uses: pablosancheznunez/research-tools-ops/.github/workflows/cran-watch.yml@main
+    permissions:
+      contents: write
     with:
       package: reproimage
