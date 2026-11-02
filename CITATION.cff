@@ -1,0 +1,26 @@
+cff-version: 1.2.0
+message: "If you use ReproImage, please cite it as below."
+type: software
+title: "ReproImage: integrity, provenance and reproducibility checks for scientific images"
+version: 0.1.0
+date-released: 2026-11-02
+authors:
+  - family-names: "Sánchez-Núñez"
+    given-names: "Pablo"
+    orcid: "https://orcid.org/0000-0001-7845-9506"
+url: "https://pablosancheznunez.github.io/reproimage/"
+repository-code: "https://github.com/pablosancheznunez/reproimage"
+license: MIT
+keywords:
+  - research integrity
+  - image integrity
+  - reproducibility
+  - provenance
+  - RO-Crate
+  - perceptual hashing
+abstract: >-
+  Fingerprints scientific images (file and pixel SHA-256, difference and
+  perceptual hashes in eight orientations) and lists identical and visually
+  similar pairs, with a self-contained HTML report and an RO-Crate provenance
+  record. A Python tool and an R package implement the same written
+  specification and are tested against the same synthetic reference dataset.

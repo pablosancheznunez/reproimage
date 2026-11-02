@@ -1,0 +1,11 @@
+# High-risk paths need the owner's approval (see .maintenance.json).
+/ALGORITHMS.md @pablosancheznunez
+/src/reproimage/hashing.py @pablosancheznunez
+/src/reproimage/analysis.py @pablosancheznunez
+/r/R/hashing.R @pablosancheznunez
+/r/R/analysis.R @pablosancheznunez
+/reference/ @pablosancheznunez
+/r/tests/testthat/reference/ @pablosancheznunez
+/.github/ @pablosancheznunez
+/.maintenance.json @pablosancheznunez
+/CLAUDE.md @pablosancheznunez

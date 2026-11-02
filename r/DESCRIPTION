@@ -1,0 +1,26 @@
+Package: reproimage
+Title: Integrity, Provenance and Reproducibility Checks for Scientific Images
+Version: 0.1.0
+Authors@R:
+    person("Pablo", "Sánchez-Núñez", email = "psancheznunez@outlook.com",
+           role = c("aut", "cre"), comment = c(ORCID = "0000-0001-7845-9506"))
+Description: Fingerprints scientific images (file and pixel SHA-256,
+    difference and perceptual hashes in eight orientations) and lists pairs
+    that are identical or visually similar, with an RO-Crate provenance
+    record. Implements the same specified algorithms as the ReproImage Python
+    tool and is tested against the same reference images. Results describe
+    visual relations between images, not misconduct.
+License: MIT + file LICENSE
+URL: https://github.com/pablosancheznunez/reproimage
+BugReports: https://github.com/pablosancheznunez/reproimage/issues
+Encoding: UTF-8
+Imports:
+    digest,
+    jpeg,
+    jsonlite,
+    png,
+    tiff
+Suggests:
+    testthat (>= 3.0.0)
+Config/testthat/edition: 3
+Config/roxygen2/version: 8.1.1

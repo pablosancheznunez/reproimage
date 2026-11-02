@@ -1,0 +1,29 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "reproimage"
+version = "0.1.0"
+description = "Integrity, provenance and reproducibility checks for scientific images"
+readme = "README.md"
+license = "MIT"
+authors = [{ name = "Pablo Sánchez-Núñez" }]
+requires-python = ">=3.10"
+dependencies = ["numpy>=1.24", "pillow>=10"]
+
+[project.optional-dependencies]
+test = ["pytest>=8"]
+
+[project.scripts]
+reproimage = "reproimage.cli:main"
+
+[project.urls]
+Homepage = "https://pablosancheznunez.github.io/reproimage/"
+Source = "https://github.com/pablosancheznunez/reproimage"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
