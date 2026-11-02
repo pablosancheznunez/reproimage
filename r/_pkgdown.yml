@@ -1,0 +1,48 @@
+url: https://pablosancheznunez.com/reproimage/r/
+
+template:
+  bootstrap: 5
+  bslib:
+    primary: "#2f5a4c"
+  opengraph:
+    image:
+      src: man/figures/card.png
+      alt: "reproimage: integrity, provenance and reproducibility checks for scientific images"
+
+authors:
+  Pablo Sánchez-Núñez:
+    href: https://pablosancheznunez.com
+
+home:
+  title: "reproimage: integrity checks for scientific images"
+  links:
+  - text: Python tool and example report
+    href: https://pablosancheznunez.com/reproimage/
+  - text: Algorithm specification
+    href: https://github.com/pablosancheznunez/reproimage/blob/main/ALGORITHMS.md
+  - text: Author website
+    href: https://pablosancheznunez.com
+
+navbar:
+  structure:
+    left: [intro, reference, news]
+    right: [search, github]
+
+reference:
+- title: Analyse images
+  desc: Fingerprint a folder or a set of files and find related pairs.
+  contents:
+  - ri_analyze
+  - reproimage_result
+  - ri_write
+- title: Building blocks
+  desc: Read images, compute fingerprints and compare them.
+  contents:
+  - ri_read
+  - ri_fingerprint
+  - ri_compare
+  - ri_hamming
+- title: Reference data
+  desc: Synthetic images with known relations and expected results.
+  contents:
+  - ri_example_dir

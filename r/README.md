@@ -1,5 +1,6 @@
-# reproimage (R)
+# reproimage <img src="man/figures/logo.png" align="right" height="139" alt="reproimage logo" />
 
+[![R-CMD-check](https://github.com/pablosancheznunez/reproimage/actions/workflows/ci.yml/badge.svg)](https://github.com/pablosancheznunez/reproimage/actions/workflows/ci.yml)
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.23881635.svg)](https://doi.org/10.5281/zenodo.23881635)
 
 Integrity, provenance and reproducibility checks for scientific images.

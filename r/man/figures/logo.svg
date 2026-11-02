@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 278" width="240" height="278" role="img" aria-label="reproimage logo">
+  <polygon points="120,4 236,71 236,207 120,274 4,207 4,71" fill="#2f5a4c" stroke="#22443a" stroke-width="6"/>
+  <g>
+    <rect x="38" y="82" width="74" height="60" rx="6" fill="#ffffff" opacity=".95"/>
+    <path d="M44 136 L64 110 L77 123 L88 112 L106 136 Z" fill="#8fb3a6"/>
+    <circle cx="94" cy="97" r="7" fill="#e3a33b"/>
+  </g>
+  <g transform="translate(240 0) scale(-1 1)">
+    <rect x="38" y="82" width="74" height="60" rx="6" fill="#ffffff" opacity=".95"/>
+    <path d="M44 136 L64 110 L77 123 L88 112 L106 136 Z" fill="#8fb3a6"/>
+    <circle cx="94" cy="97" r="7" fill="#e3a33b"/>
+  </g>
+  <path d="M106 166 l10 10 l20 -22" stroke="#e3a33b" stroke-width="6" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+  <text x="120" y="222" text-anchor="middle" font-family="Georgia, serif" font-size="33" fill="#ffffff">reproimage</text>
+</svg>
