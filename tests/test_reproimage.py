@@ -82,7 +82,7 @@ def test_cli_writes_report_and_provenance(tmp_path):
 
 
 def test_r_package_uses_the_same_reference():
-    r_ref = ROOT / "r" / "tests" / "testthat" / "reference"
+    r_ref = ROOT / "r" / "inst" / "extdata" / "reference"
     for path in sorted((REFERENCE / "images").iterdir()):
         assert (r_ref / "images" / path.name).read_bytes() == path.read_bytes(), f"copy {path.name} to {r_ref}"
     assert json.loads((r_ref / "expected.json").read_text(encoding="utf-8")) == json.loads((REFERENCE / "expected.json").read_text(encoding="utf-8"))

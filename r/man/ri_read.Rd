@@ -10,9 +10,14 @@ ri_read(path)
 \item{path}{Path to a PNG, TIFF or JPEG file.}
 }
 \value{
-A list with `rgb` (an H x W x 3 array on a 0-255 scale), `width`,
-  `height`, `format` and `bit_depth`.
+A list with \code{rgb} (an H x W x 3 array on a 0-255 scale), \code{width},
+\code{height}, \code{format} and \code{bit_depth}. 16-bit samples are scaled by 1/257.
 }
 \description{
 Read an image as specified in ALGORITHMS.md
+}
+\examples{
+img <- ri_read(file.path(ri_example_dir(), "cells_a_16bit.tif"))
+img[c("width", "height", "format", "bit_depth")]
+range(img$rgb)
 }

@@ -1,9 +1,29 @@
+default_thresholds <- list(dhash = 10L, phash = 10L)
+
+check_thresholds <- function(thresholds) {
+  if (!is.list(thresholds) || !all(c("dhash", "phash") %in% names(thresholds)) ||
+      !all(vapply(thresholds[c("dhash", "phash")], function(v) is.numeric(v) && length(v) == 1 && v >= 0 && v <= 64, TRUE))) {
+    stop("`thresholds` must be a list with `dhash` and `phash` between 0 and 64.", call. = FALSE)
+  }
+  list(dhash = as.integer(thresholds$dhash), phash = as.integer(thresholds$phash))
+}
+
 #' Fingerprint one image
 #'
-#' @param path Image file.
-#' @param name Name recorded in the result (default: the file name).
-#' @return A list with hashes, size and format.
+#' Computes the SHA-256 of the file and of its decoded pixels, and the
+#' difference hash (dHash) and perceptual hash (pHash) of the image in eight
+#' orientations, as specified in the package's `ALGORITHMS.md`.
+#'
+#' @param path Image file (PNG, TIFF or JPEG).
+#' @param name Name recorded in the result.
+#' @return A list with `name`, `file_sha256`, `pixel_sha256`, `width`,
+#'   `height`, `dhash`, `phash`, `format`, `bit_depth` and `variants` (the
+#'   hashes of every orientation).
 #' @export
+#' @examples
+#' f <- file.path(ri_example_dir(), "gel_a.png")
+#' fp <- ri_fingerprint(f)
+#' fp[c("name", "width", "height", "dhash", "phash")]
 ri_fingerprint <- function(path, name = basename(path)) {
   img <- ri_read(path)
   g <- ri_grey(img$rgb)
@@ -20,12 +40,23 @@ ri_fingerprint <- function(path, name = basename(path)) {
 
 #' Compare two fingerprints
 #'
+#' Applies the pair rules of `ALGORITHMS.md`: identical files, identical
+#' pixels, or visual similarity in any of eight orientations within the
+#' distance thresholds.
+#'
 #' @param a,b Fingerprints from [ri_fingerprint()].
-#' @param thresholds Maximum dHash and pHash distances for `"similar"`.
-#' @return `NULL` if the images are different, otherwise a list with the
-#'   category, orientation and distances (ALGORITHMS.md section 7).
+#' @param thresholds Maximum dHash and pHash Hamming distances (0 to 64) for
+#'   a pair to count as `"similar"`.
+#' @return `NULL` if the images are not related, otherwise a list with
+#'   `category`, `orientation`, `dhash_distance` and `phash_distance`.
 #' @export
-ri_compare <- function(a, b, thresholds = list(dhash = 10L, phash = 10L)) {
+#' @examples
+#' d <- ri_example_dir()
+#' a <- ri_fingerprint(file.path(d, "gel_a.png"))
+#' b <- ri_fingerprint(file.path(d, "gel_a_rot90.png"))
+#' ri_compare(a, b)
+ri_compare <- function(a, b, thresholds = default_thresholds) {
+  thresholds <- check_thresholds(thresholds)
   same <- function(category) list(category = category, orientation = NULL, dhash_distance = 0L, phash_distance = 0L)
   if (a$file_sha256 == b$file_sha256) return(same("identical_file"))
   if (a$pixel_sha256 == b$pixel_sha256) return(same("identical_pixels"))
@@ -41,34 +72,56 @@ ri_compare <- function(a, b, thresholds = list(dhash = 10L, phash = 10L)) {
   list(category = "similar", orientation = best$o, dhash_distance = best$d, phash_distance = best$p)
 }
 
-#' Analyze a folder of images
+#' Analyse a set of images
 #'
-#' Fingerprints every PNG, TIFF and JPEG file (recursively) and lists the pairs
-#' that are identical or visually similar. Results describe visual relations,
-#' not misconduct, and need expert review.
+#' Fingerprints every image and lists the pairs that are identical or visually
+#' similar. Results describe visual relations between images, never
+#' misconduct: a similar pair may be a legitimate reuse, a control shown twice
+#' or an honest error, and always needs expert review.
 #'
-#' @param folder Folder with images.
+#' @param x A folder (searched recursively for PNG, TIFF and JPEG files) or a
+#'   character vector of image files.
 #' @param thresholds Maximum dHash and pHash distances for `"similar"`.
-#' @return A result list with the same structure as the Python tool's
-#'   `result.json` (schema `reproimage-result/1`).
+#' @param progress Show progress messages.
+#' @return An object of class `reproimage_result`, with the structure of the
+#'   Python tool's `result.json` (schema `reproimage-result/1`). It has
+#'   `print()`, `summary()` and `as.data.frame()` methods and can be written
+#'   with [ri_write()].
 #' @export
 #' @examples
-#' \dontrun{
-#' res <- ri_analyze("figures/")
-#' ri_pairs(res)
-#' }
-ri_analyze <- function(folder, thresholds = list(dhash = 10L, phash = 10L)) {
-  files <- list.files(folder, recursive = TRUE)
-  files <- files[tolower(tools::file_ext(files)) %in% extensions]
-  files <- sort(files, method = "radix")
-  images <- lapply(files, function(f) ri_fingerprint(file.path(folder, f), name = f))
+#' res <- ri_analyze(ri_example_dir())
+#' res
+#' head(as.data.frame(res))
+ri_analyze <- function(x, thresholds = default_thresholds, progress = FALSE) {
+  thresholds <- check_thresholds(thresholds)
+  if (length(x) == 1 && dir.exists(x)) {
+    root <- normalizePath(x, winslash = "/")
+    names <- list.files(x, recursive = TRUE)
+    names <- sort(names[tolower(tools::file_ext(names)) %in% extensions], method = "radix")
+    paths <- file.path(root, names)
+  } else {
+    missing <- x[!file.exists(x)]
+    if (length(missing)) stop("Files not found: ", paste(missing, collapse = ", "), call. = FALSE)
+    paths <- normalizePath(x, winslash = "/")
+    names <- basename(paths)
+    if (anyDuplicated(names)) stop("File names must be unique; pass a folder instead.", call. = FALSE)
+    o <- order(names, method = "radix")
+    paths <- paths[o]
+    names <- names[o]
+    root <- NULL
+  }
+  if (!length(paths)) stop("No PNG, TIFF or JPEG images found.", call. = FALSE)
+  images <- lapply(seq_along(paths), function(i) {
+    if (progress) message(sprintf("[%d/%d] %s", i, length(paths), names[i]))
+    ri_fingerprint(paths[i], name = names[i])
+  })
   pairs <- list()
   n <- length(images)
   if (n > 1) for (i in 1:(n - 1)) for (j in (i + 1):n) {
     res <- ri_compare(images[[i]], images[[j]], thresholds)
     if (!is.null(res)) pairs[[length(pairs) + 1]] <- c(list(a = images[[i]]$name, b = images[[j]]$name), res)
   }
-  list(
+  result <- list(
     schema = "reproimage-result/1",
     tool = list(name = "reproimage-r", version = as.character(utils::packageVersion("reproimage")),
                 algorithm_version = algorithm_version),
@@ -76,54 +129,19 @@ ri_analyze <- function(folder, thresholds = list(dhash = 10L, phash = 10L)) {
     images = lapply(images, function(im) im[names(im) != "variants"]),
     pairs = pairs
   )
+  structure(result, class = "reproimage_result", paths = stats::setNames(paths, names))
 }
 
-#' Related pairs as a data frame
+#' Folder with the reference images
 #'
-#' @param result A result from [ri_analyze()].
-#' @return A data frame with one row per related pair.
+#' Twelve synthetic gel and fluorescence images with known relations (an exact
+#' copy, the same pixels saved as TIFF, rotated, flipped and re-contrasted
+#' versions, a spliced lane and unrelated negatives). The expected results are
+#' in `reference/expected.json` next to the folder; the Python and R
+#' implementations must reproduce them exactly.
+#'
+#' @return The path of the folder.
 #' @export
-ri_pairs <- function(result) {
-  if (!length(result$pairs)) {
-    return(data.frame(a = character(), b = character(), category = character(), orientation = character(),
-                      dhash_distance = integer(), phash_distance = integer()))
-  }
-  do.call(rbind, lapply(result$pairs, function(p) {
-    data.frame(a = p$a, b = p$b, category = p$category,
-               orientation = if (is.null(p$orientation)) NA_character_ else p$orientation,
-               dhash_distance = p$dhash_distance, phash_distance = p$phash_distance)
-  }))
-}
-
-#' Write a result with its provenance
-#'
-#' Writes `result.json`, `pairs.csv` and an RO-Crate `ro-crate-metadata.json`
-#' describing the analysis.
-#'
-#' @param result A result from [ri_analyze()].
-#' @param out_dir Output folder.
-#' @return The output folder, invisibly.
-#' @export
-ri_write <- function(result, out_dir) {
-  dir.create(out_dir, showWarnings = FALSE, recursive = TRUE)
-  jsonlite::write_json(result, file.path(out_dir, "result.json"), auto_unbox = TRUE, null = "null", pretty = TRUE, digits = NA)
-  utils::write.csv(ri_pairs(result), file.path(out_dir, "pairs.csv"), row.names = FALSE)
-  now <- format(Sys.time(), "%Y-%m-%dT%H:%M:%SZ", tz = "UTC")
-  files <- lapply(result$images, function(im) list(`@id` = paste0("input/", im$name), `@type` = "File", name = im$name, sha256 = im$file_sha256))
-  graph <- c(list(
-    list(`@id` = "ro-crate-metadata.json", `@type` = "CreativeWork",
-         conformsTo = list(`@id` = "https://w3id.org/ro/crate/1.1"), about = list(`@id` = "./")),
-    list(`@id` = "./", `@type` = "Dataset", name = "ReproImage analysis", datePublished = now,
-         hasPart = list(list(`@id` = "result.json"), list(`@id` = "pairs.csv")), mentions = list(`@id` = "#analysis")),
-    list(`@id` = "#analysis", `@type` = "CreateAction", name = "Fingerprint images and classify pairs",
-         instrument = list(`@id` = "#reproimage"), endTime = now,
-         object = lapply(files, function(f) list(`@id` = f$`@id`)),
-         result = list(list(`@id` = "result.json"), list(`@id` = "pairs.csv"))),
-    list(`@id` = "#reproimage", `@type` = "SoftwareApplication", name = "ReproImage (R)",
-         version = result$tool$version, url = "https://github.com/pablosancheznunez/reproimage",
-         description = paste("Algorithm version", result$tool$algorithm_version))
-  ), files)
-  jsonlite::write_json(list(`@context` = "https://w3id.org/ro/crate/1.1/context", `@graph` = graph),
-                       file.path(out_dir, "ro-crate-metadata.json"), auto_unbox = TRUE, pretty = TRUE)
-  invisible(out_dir)
-}
+#' @examples
+#' list.files(ri_example_dir())
+ri_example_dir <- function() system.file("extdata", "reference", "images", package = "reproimage", mustWork = TRUE)

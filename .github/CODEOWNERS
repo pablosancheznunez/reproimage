@@ -5,7 +5,7 @@
 /r/R/hashing.R @pablosancheznunez
 /r/R/analysis.R @pablosancheznunez
 /reference/ @pablosancheznunez
-/r/tests/testthat/reference/ @pablosancheznunez
+/r/inst/extdata/reference/ @pablosancheznunez
 /.github/ @pablosancheznunez
 /.maintenance.json @pablosancheznunez
 /CLAUDE.md @pablosancheznunez

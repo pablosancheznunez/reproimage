@@ -1,0 +1,115 @@
+---
+title: "Image integrity checks with reproimage"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Image integrity checks with reproimage}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(collapse = TRUE, comment = "#>")
+```
+
+## What it does
+
+reproimage helps check the figures of a manuscript, a thesis or a data set
+before publication or during a reproducibility audit. It finds three kinds
+of relation between images:
+
+| Category | Rule |
+|---|---|
+| Identical files | Same SHA-256 of the file bytes |
+| Identical pixels | Same SHA-256 of the decoded pixels, for example the same image saved as PNG and TIFF |
+| Visually similar | Difference and perceptual hashes within a distance threshold, in any of eight orientations |
+
+**These are visual relations, never evidence of misconduct.** A similar pair
+may be a legitimate reuse (the same control in two figures, declared), a
+duplicated panel by mistake, or something that needs explanation. Every
+result needs review by someone who knows the experiment.
+
+## The reference images
+
+The package ships twelve synthetic images with known relations: an exact
+copy, the same pixels saved as TIFF, a rotation, a flip, a contrast change, a
+spliced lane, a 16-bit version and unrelated negatives.
+
+```{r}
+library(reproimage)
+dir <- ri_example_dir()
+list.files(dir)
+```
+
+## Analysing a folder
+
+```{r}
+res <- ri_analyze(dir)
+res
+summary(res)
+```
+
+`gel_a_rot90.png` is reported as similar to `gel_a.png` in orientation
+`rot270`: rotating it 270 degrees counter-clockwise recovers the original.
+The spliced gel, in which one lane comes from another image, is **not**
+reported: hashes describe the whole image, and partial duplication inside an
+otherwise different image is out of scope for algorithm version 1.
+
+The pairs are a data frame, ready for further analysis:
+
+```{r}
+pairs <- as.data.frame(res)
+pairs[pairs$category == "similar", c("a", "b", "orientation", "dhash_distance", "phash_distance")]
+```
+
+## Thresholds
+
+Two images are similar when both the dHash and the pHash Hamming distances
+(out of 64 bits) are at most 10. Lower thresholds give fewer, more certain
+pairs; higher thresholds catch heavier edits at the cost of false positives.
+The thresholds are recorded in every result.
+
+```{r}
+strict <- ri_analyze(dir, thresholds = list(dhash = 2, phash = 2))
+summary(strict)
+```
+
+## Report and provenance
+
+`ri_write()` writes the result as JSON and CSV, a self-contained HTML report
+with side-by-side thumbnails, and an RO-Crate record that lists every input
+with its checksum, the package and algorithm versions and the parameters.
+Archived with the images, it lets anyone repeat the check.
+
+```{r}
+out <- file.path(tempdir(), "reproimage-vignette")
+ri_write(res, out)
+list.files(out)
+crate <- jsonlite::fromJSON(file.path(out, "ro-crate-metadata.json"), simplifyVector = FALSE)
+vapply(crate[["@graph"]][1:4], function(e) e[["@type"]], "")
+unlink(out, recursive = TRUE)
+```
+
+## One specification, two implementations
+
+The algorithms are written down in `ALGORITHMS.md` in the source repository:
+decoding to a 0 to 255 scale (16-bit samples divided by 257), a fixed grey
+conversion, a block resize that avoids library resampling, a comparison
+tolerance that makes results independent of floating-point summation order,
+and the hash and pair rules. This package and the ReproImage Python tool
+implement it independently. Both are tested against the expected results of
+the reference images, which ship with the package:
+
+```{r}
+expected <- jsonlite::fromJSON(file.path(dirname(dir), "expected.json"), simplifyVector = FALSE)
+got <- vapply(res$images, function(im) im$phash, "")
+want <- vapply(expected$images, function(im) im$phash, "")
+identical(got, want)
+```
+
+## Known limits
+
+* Whole-image hashes miss duplicated regions inside otherwise different
+  images (such as the spliced lane above).
+* Strong crops or resizing can push related images past the thresholds.
+* 16-bit colour images are analysed, but decoders reduce them differently,
+  so they are not part of the conformance tests.

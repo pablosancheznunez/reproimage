@@ -12,8 +12,12 @@ extensions <- c("png", "tif", "tiff", "jpg", "jpeg")
 #'
 #' @param path Path to a PNG, TIFF or JPEG file.
 #' @return A list with `rgb` (an H x W x 3 array on a 0-255 scale), `width`,
-#'   `height`, `format` and `bit_depth`.
+#'   `height`, `format` and `bit_depth`. 16-bit samples are scaled by 1/257.
 #' @export
+#' @examples
+#' img <- ri_read(file.path(ri_example_dir(), "cells_a_16bit.tif"))
+#' img[c("width", "height", "format", "bit_depth")]
+#' range(img$rgb)
 ri_read <- function(path) {
   ext <- tolower(tools::file_ext(path))
   if (ext == "png") {
@@ -94,6 +98,8 @@ ri_phash <- function(g) {
 #' @param a,b Hashes as 16 hexadecimal characters.
 #' @return An integer between 0 and 64.
 #' @export
+#' @examples
+#' ri_hamming("ffffffffffffffff", "fffffffffffffff0")
 ri_hamming <- function(a, b) sum(hex_to_bits(a) != hex_to_bits(b))
 
 rot90 <- function(m) t(m)[ncol(m):1, , drop = FALSE]

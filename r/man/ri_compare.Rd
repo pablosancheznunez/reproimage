@@ -4,17 +4,26 @@
 \alias{ri_compare}
 \title{Compare two fingerprints}
 \usage{
-ri_compare(a, b, thresholds = list(dhash = 10L, phash = 10L))
+ri_compare(a, b, thresholds = default_thresholds)
 }
 \arguments{
-\item{a, b}{Fingerprints from [ri_fingerprint()].}
+\item{a, b}{Fingerprints from \code{\link[=ri_fingerprint]{ri_fingerprint()}}.}
 
-\item{thresholds}{Maximum dHash and pHash distances for `"similar"`.}
+\item{thresholds}{Maximum dHash and pHash Hamming distances (0 to 64) for
+a pair to count as \code{"similar"}.}
 }
 \value{
-`NULL` if the images are different, otherwise a list with the
-  category, orientation and distances (ALGORITHMS.md section 7).
+\code{NULL} if the images are not related, otherwise a list with
+\code{category}, \code{orientation}, \code{dhash_distance} and \code{phash_distance}.
 }
 \description{
-Compare two fingerprints
+Applies the pair rules of \code{ALGORITHMS.md}: identical files, identical
+pixels, or visual similarity in any of eight orientations within the
+distance thresholds.
+}
+\examples{
+d <- ri_example_dir()
+a <- ri_fingerprint(file.path(d, "gel_a.png"))
+b <- ri_fingerprint(file.path(d, "gel_a_rot90.png"))
+ri_compare(a, b)
 }

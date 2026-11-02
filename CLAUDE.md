@@ -15,7 +15,7 @@ pablosancheznunez/research-tools-ops). Follow these rules.
 
 ## What you must never change
 
-- `ALGORITHMS.md`, `src/reproimage/hashing.py`, `r/R/hashing.R`, the thresholds in `analysis.py` and `r/R/analysis.R`, `reference/` and `r/tests/testthat/reference/`. These define what the tool detects. Propose changes in an issue instead.
+- `ALGORITHMS.md`, `src/reproimage/hashing.py`, `r/R/hashing.R`, the thresholds in `analysis.py` and `r/R/analysis.R`, `reference/` and `r/inst/extdata/reference/`. These define what the tool detects. Propose changes in an issue instead.
 - Workflows, `.maintenance.json`, `CODEOWNERS` and this file.
 - Never weaken or delete a test to make it pass.
 

@@ -15,3 +15,6 @@ An integer between 0 and 64.
 \description{
 Hamming distance between two 64-bit hashes
 }
+\examples{
+ri_hamming("ffffffffffffffff", "fffffffffffffff0")
+}

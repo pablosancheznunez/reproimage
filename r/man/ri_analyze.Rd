@@ -2,27 +2,32 @@
 % Please edit documentation in R/analysis.R
 \name{ri_analyze}
 \alias{ri_analyze}
-\title{Analyze a folder of images}
+\title{Analyse a set of images}
 \usage{
-ri_analyze(folder, thresholds = list(dhash = 10L, phash = 10L))
+ri_analyze(x, thresholds = default_thresholds, progress = FALSE)
 }
 \arguments{
-\item{folder}{Folder with images.}
+\item{x}{A folder (searched recursively for PNG, TIFF and JPEG files) or a
+character vector of image files.}
 
-\item{thresholds}{Maximum dHash and pHash distances for `"similar"`.}
+\item{thresholds}{Maximum dHash and pHash distances for \code{"similar"}.}
+
+\item{progress}{Show progress messages.}
 }
 \value{
-A result list with the same structure as the Python tool's
-  `result.json` (schema `reproimage-result/1`).
+An object of class \code{reproimage_result}, with the structure of the
+Python tool's \code{result.json} (schema \code{reproimage-result/1}). It has
+\code{print()}, \code{summary()} and \code{as.data.frame()} methods and can be written
+with \code{\link[=ri_write]{ri_write()}}.
 }
 \description{
-Fingerprints every PNG, TIFF and JPEG file (recursively) and lists the pairs
-that are identical or visually similar. Results describe visual relations,
-not misconduct, and need expert review.
+Fingerprints every image and lists the pairs that are identical or visually
+similar. Results describe visual relations between images, never
+misconduct: a similar pair may be a legitimate reuse, a control shown twice
+or an honest error, and always needs expert review.
 }
 \examples{
-\dontrun{
-res <- ri_analyze("figures/")
-ri_pairs(res)
-}
+res <- ri_analyze(ri_example_dir())
+res
+head(as.data.frame(res))
 }

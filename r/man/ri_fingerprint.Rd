@@ -7,13 +7,22 @@
 ri_fingerprint(path, name = basename(path))
 }
 \arguments{
-\item{path}{Image file.}
+\item{path}{Image file (PNG, TIFF or JPEG).}
 
-\item{name}{Name recorded in the result (default: the file name).}
+\item{name}{Name recorded in the result.}
 }
 \value{
-A list with hashes, size and format.
+A list with \code{name}, \code{file_sha256}, \code{pixel_sha256}, \code{width},
+\code{height}, \code{dhash}, \code{phash}, \code{format}, \code{bit_depth} and \code{variants} (the
+hashes of every orientation).
 }
 \description{
-Fingerprint one image
+Computes the SHA-256 of the file and of its decoded pixels, and the
+difference hash (dHash) and perceptual hash (pHash) of the image in eight
+orientations, as specified in the package's \code{ALGORITHMS.md}.
+}
+\examples{
+f <- file.path(ri_example_dir(), "gel_a.png")
+fp <- ri_fingerprint(f)
+fp[c("name", "width", "height", "dhash", "phash")]
 }

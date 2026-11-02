@@ -1,0 +1,14 @@
+bibentry(
+  bibtype = "Manual",
+  title = "{reproimage}: Integrity, Provenance and Reproducibility Checks for Scientific Images",
+  author = person("Pablo", "Sánchez-Núñez", comment = c(ORCID = "0000-0001-7845-9506")),
+  year = "2026",
+  note = paste("R package version", meta$Version),
+  doi = "10.5281/zenodo.23881635",
+  url = "https://github.com/pablosancheznunez/reproimage",
+  textVersion = paste0(
+    "Sánchez-Núñez, P. (2026). reproimage: Integrity, Provenance and Reproducibility ",
+    "Checks for Scientific Images. R package version ", meta$Version,
+    ". https://doi.org/10.5281/zenodo.23881635"
+  )
+)
