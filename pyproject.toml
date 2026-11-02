@@ -19,7 +19,7 @@ test = ["pytest>=8"]
 reproimage = "reproimage.cli:main"
 
 [project.urls]
-Homepage = "https://pablosancheznunez.github.io/reproimage/"
+Homepage = "https://pablosancheznunez.com/reproimage/"
 Source = "https://github.com/pablosancheznunez/reproimage"
 
 [tool.setuptools.packages.find]

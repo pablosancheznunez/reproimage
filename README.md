@@ -6,7 +6,7 @@ Point it at a folder of figures and it lists identical files, identical pixels s
 
 **Results need expert review.** ReproImage reports visual relations between images, never misconduct. A similar pair may be a legitimate reuse, a control shown twice, or an honest error.
 
-Site and example report: <https://pablosancheznunez.github.io/reproimage/>
+Site and example report: <https://pablosancheznunez.com/reproimage/>
 
 ## Python
 
