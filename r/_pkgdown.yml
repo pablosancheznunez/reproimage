@@ -1,4 +1,4 @@
-url: https://pablosancheznunez.com/reproimage/r/
+url: https://pablosancheznunez.com/reproimage/
 
 template:
   bootstrap: 5
@@ -16,8 +16,10 @@ authors:
 home:
   title: "reproimage: integrity checks for scientific images"
   links:
-  - text: Python tool and example report
-    href: https://pablosancheznunez.com/reproimage/
+  - text: Example report
+    href: https://pablosancheznunez.com/reproimage/example/report.html
+  - text: Python tool
+    href: https://github.com/pablosancheznunez/reproimage#python
   - text: Algorithm specification
     href: https://github.com/pablosancheznunez/reproimage/blob/main/ALGORITHMS.md
   - text: Author website

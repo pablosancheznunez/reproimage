@@ -14,8 +14,7 @@ Description: Fingerprints scientific images with file and pixel SHA-256
     identical results. Results describe visual relations between images, not
     misconduct. See Sánchez-Núñez (2026) <doi:10.5281/zenodo.23881635>.
 License: MIT + file LICENSE
-URL: https://pablosancheznunez.com/reproimage/r/,
-    https://pablosancheznunez.com/reproimage/,
+URL: https://pablosancheznunez.com/reproimage/,
     https://github.com/pablosancheznunez/reproimage
 BugReports: https://github.com/pablosancheznunez/reproimage/issues
 Depends:

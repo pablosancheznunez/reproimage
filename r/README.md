@@ -20,3 +20,14 @@ results as the Python tool on the bundled reference images. Results describe
 visual relations, never misconduct. See `vignette("reproimage")`; cite with
 `citation("reproimage")`. Dependencies: `png`, `jpeg`, `tiff`, `digest`,
 `jsonlite`.
+
+## Python
+
+The same checks are available as a command-line tool, with identical results:
+
+```bash
+pip install git+https://github.com/pablosancheznunez/reproimage
+reproimage analyze figures/ --out report/
+```
+
+See the [example report](https://pablosancheznunez.com/reproimage/example/report.html) it produces.
