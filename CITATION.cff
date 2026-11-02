@@ -11,6 +11,14 @@ authors:
 url: "https://pablosancheznunez.com/reproimage/"
 repository-code: "https://github.com/pablosancheznunez/reproimage"
 license: MIT
+doi: 10.5281/zenodo.23881635
+identifiers:
+  - type: doi
+    value: 10.5281/zenodo.23881635
+    description: "Concept DOI: all versions, resolves to the latest"
+  - type: doi
+    value: 10.5281/zenodo.23881636
+    description: "First release"
 keywords:
   - research integrity
   - image integrity

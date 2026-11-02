@@ -1,5 +1,7 @@
 # ReproImage
 
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.23881635.svg)](https://doi.org/10.5281/zenodo.23881635)
+
 Integrity, provenance and reproducibility checks for scientific images, in Python and R.
 
 Point it at a folder of figures and it lists identical files, identical pixels saved in another format (PNG vs TIFF), and visually similar images, including rotated, flipped and re-contrasted copies. Every analysis comes with an RO-Crate provenance record.
